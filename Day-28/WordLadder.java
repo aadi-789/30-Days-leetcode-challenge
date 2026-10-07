@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class WordLadder {
+    public int ladderLength(String beginWord,
+                            String endWord,
+                            List<String> wordList) {
+
+        Set<String> words = new HashSet<>(wordList);
+
+        if (!words.contains(endWord)) {
+            return 0;
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+
+        Set<String> visited = new HashSet<>();
+        visited.add(beginWord);
+
+        int level = 1;
+
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+
+            for (int i = 0; i < size; i++) {
+
+                String current = queue.poll();
+
+                if (current.equals(endWord)) {
+                    return level;
+                }
+
+                char[] chars = current.toCharArray();
+
+                for (int j = 0; j < chars.length; j++) {
+
+                    char original = chars[j];
+
+                    for (char c = 'a'; c <= 'z'; c++) {
+
+                        if (c == original) {
+                            continue;
+                        }
+
+                        chars[j] = c;
+
+                        String next = new String(chars);
+
+                        if (words.contains(next) &&
+                            !visited.contains(next)) {
+
+                            visited.add(next);
+                            queue.offer(next);
+                        }
+                    }
+
+                    chars[j] = original;
+                }
+            }
+
+            level++;
+        }
+
+        return 0;
+    }
+    public static void main(String[] args) {
+        WordLadder wl = new WordLadder();
+        List<String> wordList = Arrays.asList("hot", "dot", "dog", "lot", "log", "cog");
+        String beginWord = "hit";
+        String endWord = "cog";
+
+        int length = wl.ladderLength(beginWord, endWord, wordList);
+        System.out.println("Length of the shortest transformation sequence: " + length);
+    }
+}
